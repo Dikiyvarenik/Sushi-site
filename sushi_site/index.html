@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Yakudza</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1><a href="#">Yakudza Sushi</a></h1>
+        <nav>
+            <ul>
+                <li><h3><a href="#menu-section">Меню</a></h3></li>
+                <li><h3><a href="#">Акции</a></h3></li>
+                <li><h3><a href="#">Контакты</a></h3></li>
+            </ul>
+        </nav>
+        <div id="open-cart-btn" style="cursor: pointer;"><h3>Корзина:<span id="cart-count">0</span></h3></div>
+    </header>
+    <main>
+        <section class="hero">
+            <div>
+                <h2>Лучшие суши в твоем городе</h2>
+                <p>У нас всегда свежая рыба крупные порции и доставка за 20 минут</p>
+                <a href="#menu-section"><button>Хочу суши!</button></a>
+            </div>
+            <div><img src="foto/sushi.jpg" alt="премиум суши" class="hero-image"></div>
+        </section>
+        <section class="menu" id="menu-section">
+            <h3>Меню</h3>
+            <div class="menu-grid">
+                <div class="product-card">
+                    <img src="foto/fila.png">
+                    <h4>Филадельфия ролл</h4>
+                    <p class="price">780 ₽</p>
+                    <button class="add-to-cart-btn">В корзину</button>
+                </div>
+                <div class="product-card">
+                    <img src="foto/kolif.png">
+                    <h4>Колифорния</h4>
+                    <p class="price">860 ₽</p>
+                    <button class="add-to-cart-btn">В корзину</button>
+                </div>
+                <div class="product-card">
+                    <img src="foto/sasaki.png">
+                    <h4>сасаки ролл</h4>
+                    <p class="price">530 ₽</p>
+                    <button class="add-to-cart-btn">В корзину</button>
+                </div>
+                <div class="product-card">
+                    <img src="foto/moxito.png">
+                    <h4>мохито</h4>
+                    <p class="price">250 ₽</p>
+                    <button class="add-to-cart-btn">В корзину</button>
+                </div>
+                <div class="product-card">
+                    <img src="foto/orange.png">
+                    <h4>секс он бич</h4>
+                    <p class="price">250 ₽</p>
+                    <button class="add-to-cart-btn">В корзину</button>
+                </div>
+                <div class="product-card">
+                    <img src="foto/cola.png">
+                    <h4>кола</h4>
+                    <p class="price">250 ₽</p>
+                    <button class="add-to-cart-btn">В корзину</button>
+                </div>
+            </div>
+        </section>
+    </main>
+    <div class="modal-overlay" id="cart-modal">
+        <div class="modal-window">
+            <button class="close-btn"id="close-modal-btn">&times</button>
+            <h3>Ваша корзина</h3>
+            <div class="cart-items" id="cart-items-container">Ваша корзина пуста</div>
+
+            <div style="display:flex; justify-content: space-between;margin: 20px 0; font-size: 18px; font-weight: bold; border-top: 1px solid #333; padding-top: 15px;">
+                <span>Итого:</span>
+                <span><span id="total-price">0</span>₽</span>
+            </div>
+            <button class="checkout-btn">Оформить</button>
+         </div>   
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
