@@ -107,3 +107,67 @@ const close =document.getElementById("close-modal-btn");
 close.addEventListener("click",()=>{
     modal.classList.remove("active")
 });
+
+const step1= document.getElementById("modal-step-1");
+const step2 =document.getElementById("modal-step-2");
+const goToCheckoutBtn = document.getElementById("go-to-checkout-btn");
+const backToStep1Btn = document.getElementById("back-to-step-1");
+
+if (goToCheckoutBtn && step1 && step2){
+    goToCheckoutBtn.addEventListener("click",()=>{
+        if (count === 0){
+            alert("Ваша корзина пуста! Добавьте что то перед оформлением заказа.")
+            return;
+        }
+        step1.style.display="none";
+        step2.style.display="block";
+    });
+}
+if(backToStep1Btn && step1 && step2){
+    backToStep1Btn.addEventListener("click",()=>{
+        step2.style.display="none";
+        step1.style.display="block";
+    });
+}
+ymaps.ready(init);
+
+function init(){
+    const mapContainer= document.getElementById("map");
+    if(mapContainer){
+        const myMap = new ymaps.Map("map",{
+            center:[55.755814,37.617635],
+            zoom:12,
+            controls:["zoomControl"]
+        });
+        let myPlacemark;
+        myMap.events.add("click",function(e){
+            const coords = e.get("coords");
+
+            if (myPlacemark){
+                myPlacemark.geometry.setCoordinates(coords);
+            }
+            else{
+                myPlacemark = new ymaps.Placemark(coords,{
+                    iconCaption:"Доставка сюда"
+                },{
+                    preset:"islands#orangeDotIcon"
+                });
+                myMap.geoObjects.add(myPlacemark);
+            }
+
+            ymaps.geocode(coords).then(function (res){
+                const firstGeoObject=res.geoObjects.get(0);
+                if (firstGeoObject){
+                    const addressText = firstGeoObject.getAddressLine();
+                    const addressInput =document.getElementById("suggest-address");
+
+                    if(addressInput){
+                        addressInput.value=addressText;
+                    }
+                }
+            }).catch(function(err){
+                console.log("Ошибка геокодинга:",err);
+            });
+        });
+    }
+}
