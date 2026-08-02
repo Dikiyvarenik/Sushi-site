@@ -136,6 +136,8 @@ button:hover{
     position: relative; 
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); 
     text-align: center;
+    max-height: 90vh;
+    overflow-y:auto ;
 }
 .close-btn {
     position: absolute; 
@@ -175,7 +177,34 @@ button:hover{
     font-weight: bold !important;
     padding: 0 !important;
 }
-@media(max-width: 1200px){
+.total-box{
+     display: flex;
+    justify-content: space-between;
+    margin: 20px 0;
+    font-size: 25px;
+    font-weight: bold;
+    border-top: 1px solid #333;
+    padding-top: 15px;
+}
+.cart-items img{
+        width: 200px!important;
+        height: 200px!important;
+        object-fit: cover!important;
+        border-radius: 10px!important;
+}
+.cart-items{
+    max-height:450px;
+    overflow: auto;
+    padding-right: 5px;
+}
+.cart-items::-webkit-scrollbar{
+    width: 6px;
+}
+.cart-items::-webkit-scrollbar-thumb{
+    background-color: #333;
+    border-radius:10px ;
+}
+@media(max-width: 1000px){
     body{
         padding-top: 70px ;
     }
@@ -183,11 +212,16 @@ button:hover{
         padding: 15px 20px;
     }
     header h1{
-        font-size:20px;
+        font-size:40px;
+    }
+    header h3{
+        font-size: 30px;
+        padding-right: 10px;
     }
     ul{
         gap: 15px;
     }
+
     .hero{
         flex-direction: column-reverse;
         text-align:center;
@@ -197,18 +231,131 @@ button:hover{
         padding: 40px 20px;
     }
     .hero h2{
+        font-size: 35px;
+    }
+    .hero p{
+        font-size: 25px;
+        padding-bottom: 10px;
+    }
+    .hero button{
         font-size: 20px;
+        height: 75px;
+        width: 300px;
     }
     .menu h3{
-        font-size: 40px;
+        font-size: 60px;
         margin:  30px 0;
+        padding: 50px;
     }
     .menu-grid{
-        padding: 0 20px;
+        padding: 0 10px;
         gap: 20px;
+        grid-template-columns: repeat(2,1fr);
     }
     .product-card img{
-        height: 250px;
+        max-height:400px;
+        width: 100%;
         object-fit: contain;
+        border-radius: 10%;
+    } 
+    .product-card h4{
+        font-size: 24px;
+        margin:10px 0 5px 0;
+    }
+    .price{
+        font-size: 22px;
+        font-weight: bold;
+        margin: 5px 0 15px 0;
+    }
+    .add-to-cart-btn{
+        width: 80%;
+        padding: 20px;
+    }
+    .modal-window{
+        width: 80%;
+        max-width: none;      
+        padding: 25px;        
+        max-height: 90vh;
+        overflow-y: auto;
+        box-sizing: border-box;
+        border-radius: 15px;
+    }
+    .modal-window h3{
+        font-size: 55px;
+    }
+    .cart-items{
+        font-size: 30px;
+    }
+    .itogo{
+        font-size:40px;
+    }
+    .itogo2{
+        font-size: 40px;
+    }
+    .checkout-btn{
+        font-size: 35px;
+        padding:  30px 20px;
+        border-radius:  40px;
+    }
+    .cart-items img{
+        width: 200px!important;
+        height: 200px!important;
+        object-fit: cover!important;
+        border-radius: 10px!important;
+    }
+    .cart-items h4{
+        font-size:30px!important;
+        font-weight: 600!important;
+        margin: 10px;
+    }
+    .cart-items p{
+        font-size: 30px;
+    }
+    .cart-items .quantity-btn{
+        width: 45px!important;
+        height: 45px!important;
+        font-size: 30px!important;
+        border-radius:50%!important;
+        padding-inline: 10px;
+    }
+    .cart-items span{
+        font-size: 30px!important;
+        font-weight: bold!important;
+        min-width: 24px!important;
+        text-align: center!important;
+    }
+    .cart-items{
+        padding:  15px 20px;
+        margin-bottom: 12px;
+        border-radius: 14px;
+        max-height: 50vh;
+    }
+    #suggest-address{
+        font-size: 25px!important;
+        padding: 20px!important;
+        border-radius: 12px!important;
+        height: auto!important;
+    }
+    #modal-step-2 label{
+        font-size: 22px!important;
+        margin-bottom:12px !important;
+        display: block!important;
+    }
+    #map{
+        width: 100%!important;
+        height: 320px!important;
+        border-radius:14px !important;
+        margin-bottom:25px !important;
+    }
+    #final-order-btn{
+        font-size: 22px!important;
+        padding: 16px 0!important;
+        border-radius:14px !important;
+        margin-top: 10px!important;
+    }
+    #back-to-step-1{
+        font-size: 18px!important;
+        padding: 15px 0!important;
+        margin-top: 15px!important;
     }
 }

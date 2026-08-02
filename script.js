@@ -10,6 +10,11 @@ const cartItemsContainer = document.getElementById("cart-items-container");
 
 function updateCartUI(){
     cartItemsContainer.innerHTML = "";
+    if (cartItems.length===0){
+        cartItemsContainer.innerHTML +=`<h3>Ваша корзина пуста</h3>`;
+        totalPriceElement.innerText=0;
+        return;
+    }
 
     cartItems.forEach(item => {
         cartItemsContainer.innerHTML += `<div class="cart-item" style="display: flex; align-items: center;justify-content: space-between; margin-bottom: 15px; background: #333; padding: 10px; border-radius: 10px;">
@@ -106,6 +111,8 @@ open.addEventListener("click",()=>{
 const close =document.getElementById("close-modal-btn");
 close.addEventListener("click",()=>{
     modal.classList.remove("active")
+    step1.style.display="block";
+    step2.style.display="none";
 });
 
 const step1= document.getElementById("modal-step-1");
@@ -121,53 +128,93 @@ if (goToCheckoutBtn && step1 && step2){
         }
         step1.style.display="none";
         step2.style.display="block";
+
+        const modalTitle = document.querySelector(".modal-window h3");
+        if (modalTitle) {
+            modalTitle.innerText = "Доставка";
+        }
+        const finalBtn = document.getElementById("final-order-btn");
+        if (finalBtn) {
+            finalBtn.innerText = "Продолжить";
+        }
+        if (myMap){
+            myMap.container.fitToViewport()
+        }
     });
 }
 if(backToStep1Btn && step1 && step2){
     backToStep1Btn.addEventListener("click",()=>{
         step2.style.display="none";
         step1.style.display="block";
+
+         const modalTitle = document.querySelector(".modal-window h3");
+        if (modalTitle) {
+            modalTitle.innerText = "Ваша корзина";
+        }
     });
 }
 ymaps.ready(init);
 
-function init(){
-    const mapContainer= document.getElementById("map");
-    if(mapContainer){
-        const myMap = new ymaps.Map("map",{
-            center:[55.755814,37.617635],
-            zoom:12,
-            controls:["zoomControl"]
-        });
-        let myPlacemark;
-        myMap.events.add("click",function(e){
-            const coords = e.get("coords");
+let myMap;
+let myPlacemark;
+function init() {
 
-            if (myPlacemark){
-                myPlacemark.geometry.setCoordinates(coords);
-            }
-            else{
-                myPlacemark = new ymaps.Placemark(coords,{
-                    iconCaption:"Доставка сюда"
-                },{
-                    preset:"islands#orangeDotIcon"
-                });
-                myMap.geoObjects.add(myPlacemark);
-            }
+    myMap = new ymaps.Map("map", {
+        center: [55.755814, 37.617635],
+        zoom: 12,
+        controls: ["zoomControl"]
+    });
 
-            ymaps.geocode(coords).then(function (res){
-                const firstGeoObject=res.geoObjects.get(0);
-                if (firstGeoObject){
-                    const addressText = firstGeoObject.getAddressLine();
-                    const addressInput =document.getElementById("suggest-address");
+    myMap.events.add("click", function (e) {
 
-                    if(addressInput){
-                        addressInput.value=addressText;
-                    }
+        const coords = e.get("coords");
+    console.log(coords); 
+
+
+        if (myPlacemark) {
+            myPlacemark.geometry.setCoordinates(coords);
+        } else {
+
+            myPlacemark = new ymaps.Placemark(
+                coords,
+                {
+                    iconCaption: "Доставка сюда"
+                },
+                {
+                    preset: "islands#orangeDotIcon"
                 }
-            }).catch(function(err){
-                console.log("Ошибка геокодинга:",err);
+            );
+
+            myMap.geoObjects.add(myPlacemark);
+        }
+
+
+        ymaps.geocode(coords)
+            .then(function (res) {
+
+                console.log("Ответ геокодера:", res);
+
+                const firstGeoObject = res.geoObjects.get(0);
+
+                console.log("Первый объект:", firstGeoObject);
+
+                if (firstGeoObject) {
+
+                    const address = firstGeoObject.getAddressLine();
+
+                    console.log("Адрес:", address);
+
+                    document.getElementById("suggest-address").value = address;
+                }
+
+            })
+            .catch(function (err) {
+
+                console.error("Ошибка геокодера:", err);
+
             });
+
         });
-    }
+
+
 }
