@@ -1,6 +1,22 @@
 let count=0;
 
+let discountPercent=0;
+
+
 let cartItems = [];
+
+function updateFinalPrice(){
+    let total = 0
+    cartItems.forEach(item=>{
+        total+= item.itemPrice*item.quantity;
+    });
+    let finalPrice = total - (total*(discountPercent/100));
+    if(totalPriceElement) totalPriceElement.innerText = total;
+    const finalPriceSlot = document.getElementById("final-price");
+    if(finalPriceSlot){
+        finalPriceSlot.innerText=Math.round(finalPrice);
+    }
+}
 
 const cart = document.getElementById("cart-count");
 const button = document.querySelectorAll(".add-to-cart-btn");
@@ -113,12 +129,17 @@ close.addEventListener("click",()=>{
     modal.classList.remove("active")
     step1.style.display="block";
     step2.style.display="none";
+    step3.style.display="none";
 });
 
 const step1= document.getElementById("modal-step-1");
 const step2 =document.getElementById("modal-step-2");
 const goToCheckoutBtn = document.getElementById("go-to-checkout-btn");
 const backToStep1Btn = document.getElementById("back-to-step-1");
+const step3= document.getElementById("modal-step-3");
+const finalOrderBtn=document.getElementById("final-order-btn");
+const summaryAddress=document.getElementById("summary-address");
+const backToStep2Btn=document.getElementById("back-to-step-2");
 
 if (goToCheckoutBtn && step1 && step2){
     goToCheckoutBtn.addEventListener("click",()=>{
@@ -153,6 +174,31 @@ if(backToStep1Btn && step1 && step2){
         }
     });
 }
+
+if (finalOrderBtn && step2 && step3){
+    finalOrderBtn.addEventListener("click",()=>{
+        const userAddress = document.getElementById("suggest-address").value;
+
+        if( userAddress.trim()===""){
+            alert("Пожалуйста,введите адрес доставки или выберете его на карте");
+            return;
+        }
+
+        if(summaryAddress){
+            summaryAddress.innerText=""+userAddress;
+        }
+        updateFinalPrice();
+        step2.style.display="none";
+        step3.style.display="block";
+    });
+}
+if (backToStep2Btn && step2 && step3){
+    backToStep2Btn.addEventListener("click",()=>{
+        step3.style.display="none";
+        step2.style.display="block";
+    });
+}
+
 ymaps.ready(init);
 
 let myMap;
@@ -191,30 +237,94 @@ function init() {
 
         ymaps.geocode(coords)
             .then(function (res) {
-
-                console.log("Ответ геокодера:", res);
-
                 const firstGeoObject = res.geoObjects.get(0);
-
-                console.log("Первый объект:", firstGeoObject);
-
                 if (firstGeoObject) {
-
                     const address = firstGeoObject.getAddressLine();
-
-                    console.log("Адрес:", address);
-
                     document.getElementById("suggest-address").value = address;
                 }
-
             })
             .catch(function (err) {
-
-                console.error("Ошибка геокодера:", err);
-
             });
 
         });
 
 
+}
+const paymentGrid = document.querySelector(".payment-grid");
+if (paymentGrid){
+    paymentGrid.addEventListener("click",(event)=>{
+        if(event.target.classList.contains("payment-btn")){
+            const currentActive=document.querySelector(".payment-btn.active");
+            if(currentActive){
+                currentActive.classList.remove("active");
+            }
+            event.target.classList.add("active")
+        }
+    });
+}
+const applyPromobtn=document.getElementById("apply-promo-btn");
+const promoInput = document.getElementById("promo-input");
+const promoMessage = document.getElementById("promo-message");
+
+applyPromobtn.addEventListener("click",()=>{
+    const promoValue = document.getElementById("promo-input").value.trim().toUpperCase();
+
+    if (promoValue === "YAKUDZA"){
+        discountPercent = 10;
+        promoMessage.innerText = "Промокод YAKUDZA применен! скидка 10%";
+        promoMessage.style.color="green";
+        promoMessage.style.display="block";
+
+        updateFinalPrice();
+    } else if (promoValue === "VARENIK") {
+        discountPercent=80;
+        promoMessage.innerText = "Промокод VARENIK применен! скидка 80%";
+        promoMessage.style.color="green";
+        promoMessage.style.display="block";
+
+        updateFinalPrice();
+    }else{
+        discountPercent=0;
+        promoMessage.innerText = "неверный промокод";
+        promoMessage.style.color = "red";
+        promoMessage.style.display="block";
+
+        updateFinalPrice();
+    }
+});
+
+const placeOrderBtn = document.getElementById("place-order-btn");
+
+
+
+if(placeOrderBtn){
+    placeOrderBtn.addEventListener("click",()=>{
+        const emalVal = document.querySelector(".checkout-email").value.trim();
+        if (emalVal ==="" || !emalVal.includes("@")){
+            alert("Пожалуйста,введите коректный Email адрес");
+            return;
+        }
+        const oplataSelect = document.querySelector(".payment-btn.active");
+        if(!oplataSelect){
+            alert("Пожалуйста выберете способ оплаты");
+            return;
+        }
+        alert("Заказ успешно оформлен! Приятного аппетита 🍣");
+
+        cartItems= [];
+        count=0;
+        discountPercent=0;
+        cart.innerText=count;
+
+        document.querySelector(".checkout-email").value="";
+        document.getElementById("promo-input").value="";
+        document.getElementById("suggest-address").value="";
+        promoMessage.style.display="none";
+        oplataSelect.classList.remove("active");
+        updateCartUI();
+        modal.classList.remove("active");
+        step1.style.display = "block";
+        step2.style.display = "none";
+        step3.style.display = "none";
+    })
 }
